@@ -9,13 +9,10 @@ exports.auth_decode = function(req, res, next) {
     } else {
         var token = req.headers.authorization.replace(/['"]+/g, '')
         try {
-            var payload = jwt.decode(req.headers.authorization, secret); // Si tira error se cambia req.header.Authorization por token
-
-            if(payload.exp <= moment().unix()) {
-                res.status(401).send({message: 'El token ha expirado'});
-            }
+            var payload = jwt.decode(token, secret); // Si tira error se cambia req.header.Authorization por token
         } catch(ex) {
-            res.status(401).send({message: 'Token inválido'});
+            console.log(ex)
+            res.status(401).send({message: 'Token inválido', error: String(ex)});
         }
         req.docente = payload;
         next(); // Si no se pone se queda en el middleware y no ejecuta los demás
