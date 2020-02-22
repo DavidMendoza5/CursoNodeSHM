@@ -9,7 +9,7 @@ exports.auth = function(docente) {
         nombre: docente.nombre,
         correo: docente.correo,
         iat: moment().unix(), // Fecha de creación
-        exp: moment().add(5,'minutes').unix() // Fecha de expiración
+        exp: moment().add(1,'minutes').unix() // Fecha de expiración
     }
     //.add(7, 'days') .add(30, 'seconds')
 
