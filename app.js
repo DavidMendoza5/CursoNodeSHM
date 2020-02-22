@@ -25,6 +25,7 @@ app.use((req, res, next) => {
 app.use('/api', rutas_docente);
 app.use('/api', rutas_estudiante);
 app.use('/api', rutas_curso);
+app.use('/imagenes', express.static('imagenes', {redirect: false}));
 
 /* PRUEBAS
 app.get('/', (req, res) => {
