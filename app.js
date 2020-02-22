@@ -6,6 +6,7 @@ var app = express(); // Instancia de express
 // Section 1: Importación de rutas
 var rutas_docente = require('./rutas/docente');
 var rutas_estudiante = require('./rutas/estudiante');
+var rutas_curso = require('./rutas/curso');
 
 // Section 2: Cargar middlewares
 app.use(bodyparse.urlencoded({extended: false}));
@@ -23,6 +24,7 @@ app.use((req, res, next) => {
 // Section 4: carga de rutas
 app.use('/api', rutas_docente);
 app.use('/api', rutas_estudiante);
+app.use('/api', rutas_curso);
 
 /* PRUEBAS
 app.get('/', (req, res) => {
