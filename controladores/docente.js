@@ -8,7 +8,7 @@ var ModelEstudiantes = require('../modelos/estudiante');
 var ModelComentarios = require('../modelos/comentario');
 
 // Cuando enviamos por POST es body y cuando es un GET es por params
-
+/*
 function home(req, res) {
     res.status(200).send({mensaje: 'Hola mundo'})
 };
@@ -17,6 +17,7 @@ function insert(req, res) {
     console.log(req.body)
     res.status(200).send({mensaje: 'Datos enviados correctamente'})
 };
+*/
 
 function crearDocente(req, res) {
     var params = req.body;
@@ -143,8 +144,8 @@ async function eliminarDocente(req,res){ // Necesitamos eliminar todo lo que ten
     res.status(200).send({message: 'Docente eliminado'})
  }
 module.exports = {
-    home,
-    insert,
+    //home,
+    //insert,
     crearDocente,
     obtenerDocente,
     obtenerDocentes,
