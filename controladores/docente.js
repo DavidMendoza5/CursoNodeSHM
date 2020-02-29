@@ -3,6 +3,9 @@ var ModelDocente = require('../modelos/docente');
 var bcrypt = require('bcrypt-nodejs');
 var mongoosePaginate = require('mongoose-pagination');
 var servicios = require('../servicios/jwt');
+var ModelCursos = require('../modelos/curso');
+var ModelEstudiantes = require('../modelos/estudiante');
+var ModelComentarios = require('../modelos/comentario');
 
 // Cuando enviamos por POST es body y cuando es un GET es por params
 
@@ -126,10 +129,19 @@ function actualizarDocente(req, res) {
         })
     }
 
-function eliminarDocente(req, res) {
-
-}
-
+async function eliminarDocente(req,res){ // Necesitamos eliminar todo lo que tenga el docente debido a que mongo no hace la eliminación cascada y deja residuos
+    var params = req.params.id
+ 
+    await ModelDocente.remove({_id: params});
+    await ModelComentarios.remove({receptor_docente: params});
+     var Cursos = await ModelCursos.distinct('_id', {docente: params}); // EL distinc nos sirve para traer un arreglo del parámetro solicitado
+     Cursos.forEach((curso) => {
+         Cursos.remove({_id: curso.id});
+         ModelEstudiantes.remove({$in: curso.registrados});
+     });
+    
+    res.status(200).send({message: 'Docente eliminado'})
+ }
 module.exports = {
     home,
     insert,
@@ -138,5 +150,6 @@ module.exports = {
     obtenerDocentes,
     actualizarDocente,
     eliminarDocente,
-    login
+    login,
+    eliminarDocente
 }
