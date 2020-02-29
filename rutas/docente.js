@@ -12,5 +12,6 @@ api.get('/obtenerDocente/:id', ControladorDocente.obtenerDocente); // Los dos pu
 api.get('/obtenerDocentes/:page?/:itemPerPage?', ControladorDocente.obtenerDocentes);
 api.post('/login', ControladorDocente.login);
 api.put('/actualizarDocente/:id', auth.auth_decode, ControladorDocente.actualizarDocente); // Los middleware van entre el nombre de la función y la función que se va a usar, si se usan varios se separan por comas
+api.delete('/eliminarDocente/:id', ControladorDocente.eliminarDocente);
 
 module.exports = api;
