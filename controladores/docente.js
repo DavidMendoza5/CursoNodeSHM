@@ -132,12 +132,14 @@ function actualizarDocente(req, res) {
 
 async function eliminarDocente(req,res){ // Necesitamos eliminar todo lo que tenga el docente debido a que mongo no hace la eliminación cascada y deja residuos
     var params = req.params.id
- 
-    await ModelDocente.remove({_id: params});
-    await ModelComentarios.remove({receptor_docente: params});
+    
+    //await ModelDocente.remove({_id: params});
+    //await ModelComentarios.remove({receptor_docente: params});
+    await ModelDocente.deleteOne({_id: params});
+    await ModelComentarios.deleteOne({receptor_docente: params});
      var Cursos = await ModelCursos.distinct('_id', {docente: params}); // EL distinc nos sirve para traer un arreglo del parámetro solicitado
      Cursos.forEach((curso) => {
-         Cursos.remove({_id: curso.id});
+         ModelCursos.remove({_id: curso.id});
          ModelEstudiantes.remove({$in: curso.registrados});
      });
     
