@@ -20,4 +20,3 @@ sudo apt install -y mongodb
 ```bash
 sudo systemctl status mongodb
 ```
-**Hola**
