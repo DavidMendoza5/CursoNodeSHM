@@ -1,5 +1,5 @@
 # Comandos para correr el programa
-**Verificar que se tenga instalado NodeJS y verificar la versión instalada, para este proyecto se uso la versión 12.16.1**
+**Verificar que se tenga instalado NodeJS y verificar la versión instalada, para este proyecto se usó la versión 12.16.1**
 ``` bash
 node -v
 ```
