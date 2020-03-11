@@ -9,7 +9,7 @@ var rutas_estudiante = require('./rutas/estudiante');
 var rutas_curso = require('./rutas/curso');
 
 // Section 2: Cargar middlewares
-app.use(bodyparse.urlencoded({extended: false}));
+app.use(bodyparse.urlencoded({ extended: false }));
 app.use(bodyparse.json());
 
 // Section 3: cors (Permisos para hacer peticiones)
@@ -22,10 +22,11 @@ app.use((req, res, next) => {
 });
 
 // Section 4: carga de rutas
+//app.use(require('./rutas/docente'));
 app.use('/api', rutas_docente);
 app.use('/api', rutas_estudiante);
 app.use('/api', rutas_curso);
-app.use('/imagenes', express.static('imagenes', {redirect: false}));
+app.use('/imagenes', express.static('imagenes', { redirect: false }));
 
 /* PRUEBAS
 app.get('/', (req, res) => {
