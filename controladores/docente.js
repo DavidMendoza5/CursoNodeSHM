@@ -137,11 +137,13 @@ async function eliminarDocente(req, res) { // Necesitamos eliminar todo lo que t
     //await ModelComentarios.remove({receptor_docente: params});
     await ModelDocente.deleteOne({ _id: params });
     await ModelComentarios.deleteOne({ receptor_docente: params });
-    var Cursos = await ModelCursos.distinct('_id', { docente: params }); // EL distinc nos sirve para traer un arreglo del parámetro solicitado
+    //await ModelCursos.deleteOne({docente: params});
+    await ModelCursos.deleteMany({ docente: params }); // Una opción sería intentar pasarle otro objeto que contenga $in:registrados
+    /*var Cursos = await ModelCursos.distinct('_id', {docente: params}); // EL distinc nos sirve para traer un arreglo del parámetro solicitado
     Cursos.forEach((curso) => {
-        ModelCursos.remove({ _id: curso.id });
-        ModelEstudiantes.remove({ $in: curso.registrados });
-    });
+        ModelCursos.remove({_id: curso.id});
+        ModelEstudiantes.remove({$in: curso.registrados});
+    });*/
 
     res.status(200).send({ message: 'Docente eliminado' })
 }

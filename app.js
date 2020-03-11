@@ -3,6 +3,9 @@ var express = require('express');
 var bodyparse = require('body-parser');
 var app = express(); // Instancia de express
 
+app.use(express.static('public'));
+// app.use(express.static(path.join(__dirname + 'public')));
+
 // Section 1: Importación de rutas
 var rutas_docente = require('./rutas/docente');
 var rutas_estudiante = require('./rutas/estudiante');
