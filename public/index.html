@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>CHAT socket io</title>
+        <link rel="stylesheet" href="./main.css">
+    </head>
+    <body>
+
+        <h1>CHAT</h1>
+       
+        <div id="chat-container">
+            <div id="chat-window">
+                <div id="output">
+                    
+                </div>
+                <div id="actions">
+
+                </div>
+                <input type="text" id="username" placeholder="User name">
+                <input type="text" id="message" placeholder="Message">
+                <button id="send" value="send"> send</button>
+                
+            </div>
+        </div>
+
+
+        <!-- //si pegamos esto en el navegador vemos el codigo -->
+        <!-- crea un variable io que es accesible a todo el html -->
+        <script src="socket.io/socket.io.js"></script>
+        <script> 
+        var socket = io(); 
+        </script> 
+        <script src="./chat.js"></script>
+    </body>
+</html>
