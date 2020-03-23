@@ -7,7 +7,7 @@ var socketIO = require('socket.io');
 mongoose.Promise = global.Promise; // Se declara como una promesa porque de ese tipo serán los datos devueltos
 
 // Conectarnos a la base de datos
-mongoose.connect(configuracion.connexion)
+mongoose.connect(configuracion.connexion, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true })
     .then(() => {
         console.log('conexión exitosa');
         const server = app.listen(configuracion.port, () => {
