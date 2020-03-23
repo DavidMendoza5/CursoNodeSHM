@@ -4,6 +4,11 @@ var mongoose = require('mongoose');
 
 var Schema = mongoose.Schema; // Se carga la base de datos
 
+var validarCorreo = function(correo) { // Se debe crear una carpeta aparte para las funciones
+    var re = /^.+@huasteco.com+$/
+    return re.test(correo);
+}
+
 var DocentesSchema = new Schema({
     nombre: {
         type: String,
@@ -23,7 +28,8 @@ var DocentesSchema = new Schema({
         type: String,
         lowercase: true, //Siempre se pone en minúscula
         unique: true,
-        required: [true, 'El correo es necesario']
+        required: [true, 'El correo es necesario'],
+        validate: [validarCorreo, 'Este correo no es valido']
     },
     password: {
         type: String,
