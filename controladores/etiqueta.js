@@ -48,7 +48,8 @@ function obtenerEtiquetas(req,res) {
         Etiqueta.find({$and:[{referenciaId: params.referenciaId}]},(err, etiquetas) => {
             if(err) return res.status(500).send({message: 'Error en la petición'});
 
-            if(!etiquetas) return res.status(404).send({message: 'No hay cursos disponibles'});
+            if(etiquetas.length === 0) return res.status(404).send({message: 'No hay etiquetas disponibles'});
+            console.log(etiquetas);
             
             return res.status(200).send({etiquetas: etiquetas, status: true});
 
@@ -65,7 +66,7 @@ function busquedaEtiquetas(req,res) {
         Etiqueta.find({$and: [{etiqueta : params.etiqueta}]},(err, etiquetas) => {
             if(err) return res.status(500).send({message: 'Error en la petición'});
 
-            if(!etiquetas) return res.status(404).send({message: 'No hay cursos disponibles'});
+            if(etiquetas.length === 0) return res.status(404).send({message: 'No hay etiquetas disponibles'});
             
             return res.status(200).send({etiquetas: etiquetas, status: true});
 
