@@ -10,6 +10,8 @@ app.use(express.static('public'));
 var rutas_docente = require('./rutas/docente');
 var rutas_estudiante = require('./rutas/estudiante');
 var rutas_curso = require('./rutas/curso');
+var rutas_comentario = require('./rutas/comentario');
+var rutas_etiqueta = require('./rutas/etiqueta');
 
 // Section 2: Cargar middlewares
 app.use(bodyparse.urlencoded({ extended: false }));
@@ -29,6 +31,8 @@ app.use((req, res, next) => {
 app.use('/api', rutas_docente);
 app.use('/api', rutas_estudiante);
 app.use('/api', rutas_curso);
+app.use('/api', rutas_comentario);
+app.use('/api', rutas_etiqueta);
 app.use('/imagenes', express.static('imagenes', { redirect: false }));
 
 /* PRUEBAS
