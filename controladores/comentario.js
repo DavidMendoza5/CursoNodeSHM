@@ -47,6 +47,4 @@ function comentarioEstudiante(req, res) {
     });
 }
 
-module.exports = {
-    comentarioEstudiante
-}
+module.exports = comentarioEstudiante;
