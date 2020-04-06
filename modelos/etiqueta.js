@@ -8,7 +8,9 @@ var EtiquetasSchema = new Schema ({
         type: String, 
         unique: true, 
         lowercase: true, 
-        required: [true, 'Etiqueta requerida']
+        required: [true, 'Etiqueta requerida'],
+        minlength: 1,
+        maxlength: 20
     },
     referenciaId: [{type: String}]
 })
