@@ -1,11 +1,11 @@
 var ModeloComentario = require('../modelos/comentario');
-var Estudiante = require('../modelos/estudiante');
+var Estudiante = require('../modelos/estudiante'); //BOrrar no esta funcionando por el momento
 var config = require('../configuracion/config');
 
 function comentarioEstudiante(req, res) {
     var params = req.body;
 
-    const { id, nombre } = req.body;
+    const { id, nombre } = req.body; //BOrrar no esta funcionando por el momento 
 
     //var comentarios = new ModeloComentario(params)
 
@@ -25,6 +25,7 @@ function comentarioEstudiante(req, res) {
             });
         }
 
+        //Borrar IF comentarioDB
         if (comentarioDB) {
             if (comentario.estudiante == id) {
                 console.log(id);
@@ -46,6 +47,4 @@ function comentarioEstudiante(req, res) {
     });
 }
 
-module.exports = {
-    comentarioEstudiante
-}
+module.exports = comentarioEstudiante;
