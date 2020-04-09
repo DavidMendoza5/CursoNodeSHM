@@ -1,9 +1,8 @@
 var express = require('express');
-var controladorComentario = require('../controladores/comentario')
-var auth = require('../servicios/jwt_decode');
+var ControladorComentario = require('../controladores/comentario');
 
 var api = express.Router();
 
-api.post('/comentarioEstudiante', controladorComentario.comentarioEstudiante);
+api.post('/comentario', ControladorComentario.comentarioEstudiante);
 
 module.exports = api;
