@@ -19,7 +19,11 @@ var EstudianteSchema = new Schema({
     correo: {
         type: String,
         lowercase: true,
-        validate: [validarCorreo, 'Este correo no es valido'] // Es otra forma de validar pero con un correo
+        validate: [validarCorreo, 'Este correo no es válido'] // Es otra forma de validar pero con un correo
+    },
+    password: {
+        type: String,
+        required: [true, 'La contraseña es necesaria']
     },
     telefono: {
         type: String,
