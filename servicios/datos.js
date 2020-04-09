@@ -17,9 +17,8 @@ async function actualizarRegistros(cursoId, estudiante) {
                     }
 
         update_docentes = {$inc: {total_estudiantes: 1}}
-        // Send email
 
-        await  ModeloDocente.findByIdAndUpdate({_id: curso.docente}, update_docentes, {upsert: true});
+        await ModeloDocente.findByIdAndUpdate({_id: curso.docente}, update_docentes, {upsert: true});
     }
     await ModeloCurso.findByIdAndUpdate({_id: cursoId}, update_curso, {upsert: true});
 }
