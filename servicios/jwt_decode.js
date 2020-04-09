@@ -21,17 +21,34 @@ exports.auth_decode = function(req, res, next) {
 }
 
 exports.rol_valido = function(req, res, next) {
-    let docente = req.body;
-    console.log(docente);
-    //let docente = req.docente;
-    if (docente.role === 'ADMIN_ROLE') {
-        next();
-    } else {
-        res.json({
-            ok: false,
-            err: {
-                message: 'El docente no es administrador'
+
+    if (req.headers.authorization) {
+        var token = req.headers.authorization.replace(/['"]+/g, '')
+        try {
+            var payload = jwt.decode(token, secret); // Si tira error se cambia req.header.Authorization por token
+        } catch (ex) {
+            console.log(ex)
+            res.status(401).send({ message: 'Token inválido', error: String(ex) });
+        }
+
+        req.docente = payload; //Nos ayuda con el ID del docente
+        let docente = req.docente;
+
+        Docente.findById({ _id: docente.sub }, (err, docenteRol) => {
+            if (err) {
+                res.status(404).send({ message: 'Docente no encontrado', err });
             }
-        });
+
+            if (docenteRol.role === 'ADMIN_ROLE') {
+                next();
+            } else {
+                res.json({
+                    ok: false,
+                    err: {
+                        message: 'El docente no es administrador'
+                    }
+                });
+            }
+        })
     }
 }
