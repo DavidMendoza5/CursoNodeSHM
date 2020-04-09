@@ -24,7 +24,7 @@ function crearDocente(req, res) {
     var Docente = new ModelDocente();
 
     Docente.nombre = params.nombre;
-    Docente.cargo = params.cargo;
+    Docente.role = params.role;
     Docente.resumen = params.resumen;
     Docente.total_estudiantes = 0;
     Docente.imagen_perfil = params.imagen_perfil;
