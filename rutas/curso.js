@@ -14,4 +14,5 @@ api.post('/s/:id', [auth.auth_decode, path_images], ControladorCurso.subirImagen
 api.put('/actualizarCurso/:id', auth.auth_decode, ControladorCurso.actualizarCurso);
 api.delete('/eliminarCurso/:id', auth.auth_decode, ControladorCurso.eliminarCurso);
 
+
 module.exports = api;
