@@ -16,14 +16,15 @@ function crearEstudiante(req, res) {
         if (verificarDuplicado && verificarDuplicado.length > 0) {
             res.status(200).send({ message: 'Ya está inscrito al curso', status: false })
         }
-        bcrypt.hash(params.correo + params.curso, null, null, (err, hash) => {
+        bcrypt.hash(params.correo + params.curso, null, null, (err, hash2) => {
             if (err) return res.status(500).send({ message: 'Error al crear estudiante', status: false, err: String(err) })
-            Estudiante.token_calificacion = hash;
+                //Estudiante.password = hash;
+            Estudiante.token_calificacion = hash2;
             Estudiante.status_calificacion = true;
             Estudiante.save(async(err, estudianteRegistrado) => {
                 if (err) res.status(500).send({ message: 'Error al crear estudiante', status: false, err: String(err) })
                     // Actualizar status, agregar registrados
-                console.log(params, String('hhhhhhhhhhhhhhh'))
+                console.log(params, String('Agregar registrados'))
                 await servicios.actualizarRegistros(params.curso, estudianteRegistrado);
                 res.status(200).send({ Estudiante: estudianteRegistrado, status: true })
             })
@@ -48,7 +49,6 @@ function loginEs(req, res) {
                 // Crear token de validación
                 if (err) res.status(500).send({ message: 'Las credenciales no coinciden', status: false });
                 if (verificado) {
-                    console.log(estudiante);
                     estudiante.password = undefined;
                     var token = jwt.auth(estudiante);
                     return res.status(200).send({ estudiante, token })
