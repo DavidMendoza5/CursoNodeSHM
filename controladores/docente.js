@@ -24,7 +24,7 @@ function crearDocente(req, res) {
     var Docente = new ModelDocente();
 
     Docente.nombre = params.nombre;
-    Docente.cargo = params.cargo;
+    Docente.role = params.role;
     Docente.resumen = params.resumen;
     Docente.total_estudiantes = 0;
     Docente.imagen_perfil = params.imagen_perfil;
@@ -34,6 +34,7 @@ function crearDocente(req, res) {
     Docente.redes_sociales.twitter = params.twitter;
     Docente.redes_sociales.youtube = params.youtube;
     Docente.redes_sociales.linkedin = params.linkedin;
+
 
     // Validar si el correo del docente ya existe
     ModelDocente.find({ correo: params.correo }, (err, duplicado) => {

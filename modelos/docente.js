@@ -1,6 +1,5 @@
 'use strict'
 var mongoose = require('mongoose');
-//var uniqueValidator = require('mongoose-unique-validator');
 
 var Schema = mongoose.Schema; // Se carga la base de datos
 
@@ -9,12 +8,21 @@ var validarCorreo = function(correo) { // Se debe crear una carpeta aparte para 
     return re.test(correo);
 }
 
+let rolesValidos = {
+    values: ['ADMIN_ROLE', 'DOCENT_ROLE'],
+    message: '{VALUE} Rol no válido'
+};
+
 var DocentesSchema = new Schema({
     nombre: {
         type: String,
         required: [true, 'El nombre es necesario']
     },
-    cargo: String,
+    role: {
+        type: String,
+        default: 'DOCENT_ROLE',
+        enum: rolesValidos
+    },
     resumen: {
         type: String,
         maxlength: [200, 'Fuera de rango']
