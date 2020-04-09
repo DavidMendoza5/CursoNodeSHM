@@ -3,11 +3,11 @@ var jwt = require('jwt-simple');
 var moment = require('moment');
 var secret = 'ClaveCurso'
 
-exports.auth = function(docente) {
+exports.auth = function(usuario) {
     var payload = {
-        sub: docente._id,
-        nombre: docente.nombre,
-        correo: docente.correo,
+        sub: usuario._id,
+        nombre: usuario.nombre,
+        correo: usuario.correo,
         iat: moment().unix(), // Fecha de creación
         exp: moment().add(20,'days').unix() // Fecha de expiración
     }
