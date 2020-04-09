@@ -35,6 +35,7 @@ function crearDocente(req, res) {
     Docente.redes_sociales.youtube = params.youtube;
     Docente.redes_sociales.linkedin = params.linkedin;
 
+
     // Validar si el correo del docente ya existe
     ModelDocente.find({ correo: params.correo }, (err, duplicado) => {
         if (err) res.status(500).send({ mensaje: err, status: false });
