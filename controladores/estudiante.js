@@ -49,6 +49,7 @@ function loginEs(req, res) {
                 // Crear token de validación
                 if (err) res.status(500).send({ message: 'Las credenciales no coinciden', status: false });
                 if (verificado) {
+                    console.log(estudiante);
                     estudiante.password = undefined;
                     var token = jwt.auth(estudiante);
                     return res.status(200).send({ estudiante, token })
