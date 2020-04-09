@@ -1,13 +1,8 @@
 var ModeloComentario = require('../modelos/comentario');
-var Estudiante = require('../modelos/estudiante'); //BOrrar no esta funcionando por el momento
 var config = require('../configuracion/config');
 
 function comentarioEstudiante(req, res) {
     var params = req.body;
-
-    const { id, nombre } = req.body; //BOrrar no esta funcionando por el momento 
-
-    //var comentarios = new ModeloComentario(params)
 
     let comentario = new ModeloComentario({
         descripcion: params.descripcion,
@@ -17,34 +12,17 @@ function comentarioEstudiante(req, res) {
 
     comentario.save((err, comentarioDB) => {
         if (err) {
-            return res.status(500).json({
-                status: false,
-                err: {
-                    message: 'Error al crear comentario'
-                }
-            });
+            return res.status(500).send({ message: 'Error al crear el comentario', err })
         }
 
-        //Borrar IF comentarioDB
-        if (comentarioDB) {
-            if (comentario.estudiante == id) {
-                console.log(id);
-                console.log(comentario.estudiante);
-                console.log('El estudiante si existe');
-            } else {
-                console.log('El estudiante no existe');
-                console.log(id);
-                console.log(comentario.estudiante);
-            }
-        }
         res.json({
             ok: true,
             comentario: comentarioDB,
             message: 'Comentario añadido'
         });
-        //console.log(params.comentario);
-
     });
 }
 
-module.exports = comentarioEstudiante;
+module.exports = {
+    comentarioEstudiante
+}
