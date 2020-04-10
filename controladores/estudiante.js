@@ -10,9 +10,8 @@ function crearEstudiante(req, res) {
     var Estudiante = new ModelEstudiante(params);
 
     // Verificar duplicado
-    if(params.correo === "") {
-        return res.status(500).send({ message: 'Error al crear estudiante', status: false, err: String(err) })
-    } else{
+    try {
+        // Verificar duplicado
         ModelEstudiante.find({ $and: [{ correo: params.correo }, { curso: params.curso }] }, (err, verificarDuplicado) => {
             if (err) return res.status(500).send({ message: 'Error al crear estudiante', status: false, err: String(err) })
 
@@ -37,6 +36,8 @@ function crearEstudiante(req, res) {
                 Estudiante.password = hash;
             })
         })
+    } catch (err) {
+        console.log(err);
     }
 }
 

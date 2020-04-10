@@ -35,23 +35,26 @@ function crearDocente(req, res) {
     Docente.redes_sociales.youtube = params.youtube;
     Docente.redes_sociales.linkedin = params.linkedin;
 
-
-    // Validar si el correo del docente ya existe
-    ModelDocente.find({ correo: params.correo }, (err, duplicado) => {
-        if (err) res.status(500).send({ mensaje: err, status: false });
-        if (duplicado && duplicado.length >= 1) {
-            res.status(500).send({ mensaje: 'Docente existente', status: false });
-        } else {
-            bcrypt.hash(params.password, null, null, (err, hash) => {
-                if (err) res.status(500).send({ mensaje: 'Error al encriptar la contraseña', status: false });
-                Docente.password = hash;
-                Docente.save((err, docenteRegistrado) => {
-                    if (err) res.status(500).send({ mensaje: 'Error al insertar docente', status: false });
-                    res.status(200).send({ docente: docenteRegistrado, status: true });
-                });
-            })
-        }
-    })
+    try {
+        // Validar si el correo del docente ya existe
+        ModelDocente.find({ correo: params.correo }, (err, duplicado) => {
+            if (err) res.status(500).send({ mensaje: err, status: false });
+            if (duplicado && duplicado.length >= 1) {
+                res.status(500).send({ mensaje: 'Docente existente', status: false });
+            } else {
+                bcrypt.hash(params.password, null, null, (err, hash) => {
+                    if (err) res.status(500).send({ mensaje: 'Error al encriptar la contraseña', status: false });
+                    Docente.password = hash;
+                    Docente.save((err, docenteRegistrado) => {
+                        if (err) res.status(500).send({ mensaje: 'Error al insertar docente', status: false });
+                        res.status(200).send({ docente: docenteRegistrado, status: true });
+                    });
+                })
+            }
+        })
+    } catch (err) {
+        console.log(err);
+    }
 }
 
 function obtenerDocente(req, res) {
