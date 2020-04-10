@@ -23,7 +23,7 @@ var EstudianteSchema = new Schema({
     },
     password: {
         type: String,
-        required: [true, 'La contraseña es necesaria']
+        required: [true, 'El password es necesario']
     },
     telefono: {
         type: String,
