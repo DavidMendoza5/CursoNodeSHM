@@ -97,6 +97,7 @@ function login(req, res) {
     var p_correo = params.correo;
 
     // Buscar al docente
+    if(!p_password) return res.status(500).send({ message: 'Se deben llenar ambos campos', status: false });
     ModelDocente.findOne({ correo: p_correo }, (err, docente) => {
         if (err) res.status(500).send({ message: 'Error', status: false });
         if (docente) {
