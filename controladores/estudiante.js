@@ -49,21 +49,21 @@ function loginEs(req, res) {
     try{
         if(!p_password) return res.status(500).send({ message: 'Se deben llenar ambos campos', status: false });
         ModelEstudiante.findOne({ correo: p_correo }, (err, estudiante) => {
-            if (err) res.status(500).send({ message: 'Error', status: false });
+            if (err) return res.status(500).send({ message: 'Error', status: false });
             if (estudiante) {
                 bcrypt.compare(p_password, estudiante.password, (err, verificado) => {
                     // Crear token de validación
-                    if (err) res.status(500).send({ message: 'Las credenciales no coinciden', status: false });
+                    if (err) return res.status(500).send({ message: 'Las credenciales no coinciden', status: false });
                     if (verificado) {
                         estudiante.password = undefined;
                         var token = jwt.auth(estudiante);
                         return res.status(200).send({ estudiante, token })
                     } else {
-                        res.status(404).send({ message: 'Las credenciales no coinciden', status: false });
+                        return res.status(404).send({ message: 'Las credenciales no coinciden', status: false });
                     }
                 })
             } else {
-                res.status(404).send({ message: 'Credenciales inválidas', status: false });
+                return res.status(404).send({ message: 'Credenciales inválidas', status: false });
             }
         })
     } catch (err){
