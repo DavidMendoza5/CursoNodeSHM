@@ -2,6 +2,7 @@
 var ModelEstudiante = require('../modelos/estudiante');
 var ModelDocente = require('../modelos/docente')
 var ModelCurso = require('../modelos/curso');
+var ModelComentarios = require('../modelos/comentario')
 var bcrypt = require('bcrypt-nodejs');
 var servicios = require('../servicios/datos');
 var jwt = require('../servicios/jwt');
@@ -105,8 +106,24 @@ function actualizarEstudiante(req, res) {
     })
 }
 
+async function eliminarEstudiante(req, res) {
+    var params = req.params.id;
+    
+    if (!params) {
+        return res.status(400).send({ message: 'Error del cliente' });
+    } else if (ModelEstudiante.findOne({ _id: params })) {
+        await ModelEstudiante.deleteOne({ _id: params });
+        await ModelComentarios.deleteMany({ estudiante: params });
+
+        res.status(200).send({ message: 'Estudiante eliminado' })
+    } else {
+        return res.status(404).send({ message: 'Estudiante no encontrado' });
+    }
+}
+
 module.exports = {
     crearEstudiante,
     loginEs,
-    actualizarEstudiante
+    actualizarEstudiante,
+    eliminarEstudiante
 }
