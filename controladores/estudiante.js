@@ -1,5 +1,6 @@
 'use strict'
 var ModelEstudiante = require('../modelos/estudiante');
+var ModelDocente = require('../modelos/docente')
 var ModelCurso = require('../modelos/curso');
 var bcrypt = require('bcrypt-nodejs');
 var servicios = require('../servicios/datos');
@@ -49,21 +50,21 @@ function loginEs(req, res) {
     try{
         if(!p_password) return res.status(500).send({ message: 'Se deben llenar ambos campos', status: false });
         ModelEstudiante.findOne({ correo: p_correo }, (err, estudiante) => {
-            if (err) res.status(500).send({ message: 'Error', status: false });
+            if (err) return res.status(500).send({ message: 'Error', status: false });
             if (estudiante) {
                 bcrypt.compare(p_password, estudiante.password, (err, verificado) => {
                     // Crear token de validación
-                    if (err) res.status(500).send({ message: 'Las credenciales no coinciden', status: false });
+                    if (err) return res.status(500).send({ message: 'Las credenciales no coinciden', status: false });
                     if (verificado) {
                         estudiante.password = undefined;
                         var token = jwt.auth(estudiante);
                         return res.status(200).send({ estudiante, token })
                     } else {
-                        res.status(404).send({ message: 'Las credenciales no coinciden', status: false });
+                        return res.status(404).send({ message: 'Las credenciales no coinciden', status: false });
                     }
                 })
             } else {
-                res.status(404).send({ message: 'Credenciales inválidas', status: false });
+                return res.status(404).send({ message: 'Credenciales inválidas', status: false });
             }
         })
     } catch (err){
@@ -71,7 +72,41 @@ function loginEs(req, res) {
     }
 }
 
+function actualizarEstudiante(req, res) {
+    var estudianteId = req.params.id;
+    var update = req.body;
+    var estudianteAuth = req.docente.sub;
+    
+    ModelDocente.findById({ _id: estudianteAuth }, (err, docenteRol) => {
+        if (err) {
+            return res.status(404).send({ message: 'Error', err });
+        } 
+        if (docenteRol == null) {
+            ModelEstudiante.findById({_id: estudianteAuth}, (err, userAuth) => {
+                if (err) {
+                    return res.status(404).send({ message: 'Estudiante no encontrado', err });
+                } else if(estudianteId != estudianteAuth) {
+                    return res.status(500).send({ message: 'No tienes permisos', status: false });
+                } else {
+                    ModelEstudiante.findOneAndUpdate({_id: estudianteId}, update, {new: true}, (err, estudianteActualizado) => {
+                        if (err) return res.status(500).send({ message: 'Error', status: false });
+        
+                        res.status(200).send({ estudianteActualizado, status: true });
+                    })
+                }
+            })
+        } else if(docenteRol.role === 'ADMIN_ROLE'){
+            ModelEstudiante.findOneAndUpdate({_id: estudianteId}, update, {new: true}, (err, estudianteActualizado) => {
+                if (err) return res.status(500).send({ message: 'Error', status: false });
+
+                res.status(200).send({ estudianteActualizado, status: true });
+            })
+        }
+    })
+}
+
 module.exports = {
     crearEstudiante,
-    loginEs
+    loginEs,
+    actualizarEstudiante
 }

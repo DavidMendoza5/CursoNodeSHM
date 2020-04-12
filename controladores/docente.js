@@ -7,17 +7,7 @@ var ModelCursos = require('../modelos/curso');
 var ModelEstudiantes = require('../modelos/estudiante');
 var ModelComentarios = require('../modelos/comentario');
 
-// Cuando enviamos por POST es body y cuando es un GET es por params
-/*
-function home(req, res) {
-    res.status(200).send({mensaje: 'Hola mundo'})
-};
-
-function insert(req, res) {
-    console.log(req.body)
-    res.status(200).send({mensaje: 'Datos enviados correctamente'})
-};
-*/
+// Cuando enviamos por POST es body y cuando es un GET es por params.
 
 function crearDocente(req, res) {
     var params = req.body;
@@ -97,7 +87,7 @@ function login(req, res) {
     var p_correo = params.correo;
 
     // Buscar al docente
-    if(!p_password) return res.status(500).send({ message: 'Se deben llenar ambos campos', status: false });
+    if (!p_password) return res.status(500).send({ message: 'Se deben llenar ambos campos', status: false });
     ModelDocente.findOne({ correo: p_correo }, (err, docente) => {
         if (err) res.status(500).send({ message: 'Error', status: false });
         if (docente) {
@@ -123,38 +113,51 @@ function login(req, res) {
 function actualizarDocente(req, res) {
     var docenteId = req.params.id;
     var update = req.body;
+    var id_docent_auth = req.docente.sub;
 
-    if (docenteId != req.docente.sub) {
-        if (err) res.status(500).send({ message: 'No tienes permisos', status: false });
-    }
+    ModelDocente.findById({ _id: id_docent_auth }, (err, docenteRol) => {
+        if (err) {
+            res.status(404).send({ message: 'Docente no encontrado', err });
+        }
+        if (docenteRol.role === 'ADMIN_ROLE') {
+            ModelDocente.findOneAndUpdate({ _id: docenteId }, update, { new: true }, (err, docenteActualizado) => { // El new:true sobreescribe sólo el dato que se envió
+                if (err) res.status(500).send({ message: 'Error', status: false });
 
-    ModelDocente.findOneAndUpdate({ _id: docenteId }, update, { new: true }, (err, docenteActualizado) => { // El new:true sobreescribe sólo el dato que se envió
-        if (err) res.status(500).send({ message: 'Error', status: false });
+                res.status(200).send({ docenteActualizado, status: true });
+            });
+        } else if (docenteRol.role === 'DOCENT_ROLE') {
+            if (docenteId != req.docente.sub) {
+                return res.status(500).send({ message: 'No tienes permisos', status: false });
+            } else {
+                ModelDocente.findOneAndUpdate({ _id: docenteId }, update, { new: true }, (err, docenteActualizado) => { // El new:true sobreescribe sólo el dato que se envió
+                    if (err) res.status(500).send({ message: 'Error', status: false });
 
-        res.status(200).send({ docenteActualizado, status: true });
+                    res.status(200).send({ docenteActualizado, status: true });
+                })
+            }
+        } else {
+            res.status(500).send({ message: 'Permiso denegado' })
+        }
     })
 }
 
+//REVISAR ESTA FUNCIÓN POR QUE NO ESTÁ ELIMINANDO.
 async function eliminarDocente(req, res) { // Necesitamos eliminar todo lo que tenga el docente debido a que mongo no hace la eliminación cascada y deja residuos
-    var params = req.params.id
+    var params = req.params.id;
 
-    //await ModelDocente.remove({_id: params});
-    //await ModelComentarios.remove({receptor_docente: params});
-    await ModelDocente.deleteOne({ _id: params });
-    await ModelComentarios.deleteOne({ receptor_docente: params });
-    //await ModelCursos.deleteOne({docente: params});
-    await ModelCursos.deleteMany({ docente: params }); // Una opción sería intentar pasarle otro objeto que contenga $in:registrados
-    /*var Cursos = await ModelCursos.distinct('_id', {docente: params}); // EL distinc nos sirve para traer un arreglo del parámetro solicitado
-    Cursos.forEach((curso) => {
-        ModelCursos.remove({_id: curso.id});
-        ModelEstudiantes.remove({$in: curso.registrados});
-    });*/
+    if (!params) {
+        return res.status(400).send({ message: 'Error del cliente' });
+    } else if (ModelDocente.findOne({ _id: params })) {
+        await ModelDocente.deleteOne({ _id: params });
+        await ModelComentarios.deleteOne({ receptor_docente: params });
+        await ModelCursos.deleteMany({ docente: params }); // Una opción sería intentar pasarle otro objeto que contenga $in:registrados
 
-    res.status(200).send({ message: 'Docente eliminado' })
+        res.status(200).send({ message: 'Docente eliminado' })
+    } else {
+        return res.status(404).send({ message: 'Docente no encontrado' });
+    }
 }
 module.exports = {
-    //home,
-    //insert,
     crearDocente,
     obtenerDocente,
     obtenerDocentes,
