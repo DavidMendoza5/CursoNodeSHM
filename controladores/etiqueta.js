@@ -26,7 +26,7 @@ function crearEtiqueta(req,res){
         }else{
 
             etiqueta.save((err, etiquetaRegistrado)=>{
-                if (err) return res.status(500).send({mensaje:'crearEtiqueta()> verificar deuplicados > insertar' , status: false})
+                if (err) return res.status(500).send({mensaje:'crearEtiqueta()> verificar duplicados > insertar' , status: false})
                 //si el callback de la insercion retorna datos correctos lo devolvemos con status 200
                 if(etiquetaRegistrado){
                     res.status(200).send({etiqueta: etiquetaRegistrado, status: true});
