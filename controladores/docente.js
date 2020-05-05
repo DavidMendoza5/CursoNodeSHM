@@ -57,6 +57,11 @@ function obtenerDocente(req, res) {
 }
 
 function obtenerDocentes(req, res) {
+    ModelDocente.find({}, { password: 0 }, (err, docentes) => {
+        if (err) res.status(500).send({ message: 'Error', status: false });
+        res.status(200).send(docentes);
+    })
+    /*
     var params = req.params;
     var page = 1;
     if (params.page) {
@@ -79,6 +84,7 @@ function obtenerDocentes(req, res) {
             pages: Math.ceil(total / itemPerPage)
         })
     })
+    */
 }
 
 function login(req, res) {

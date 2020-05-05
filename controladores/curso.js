@@ -23,9 +23,9 @@ function obtenerCursoDisponible(req, res) {
     if (params.page) {
         page = parseInt(params.page);
     }
-
-    var itemPerPage = 2;
-    if (params.itemPerPage) {
+    
+    var itemPerPage = 3;
+    if(params.itemPerPage) {
         itemPerPage = parseInt(params.itemPerPage);
     }
 
