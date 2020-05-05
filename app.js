@@ -2,6 +2,8 @@
 var express = require('express');
 var bodyparse = require('body-parser');
 var app = express(); // Instancia de express
+var cors = require('cors');
+var morgan = require('morgan');
 
 app.use(express.static('public'));
 // app.use(express.static(path.join(__dirname + 'public')));
@@ -14,6 +16,8 @@ var rutas_curso = require('./rutas/curso');
 // Section 2: Cargar middlewares
 app.use(bodyparse.urlencoded({ extended: false }));
 app.use(bodyparse.json());
+app.use(cors());
+app.use(morgan('dev'));
 
 // Section 3: cors (Permisos para hacer peticiones)
 app.use((req, res, next) => {
