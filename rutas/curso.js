@@ -8,7 +8,8 @@ var path_images = multipart({ uploadDir: './imagenes' });
 var api = express.Router();
 
 api.post('/crearCurso', rol_valido, auth_decode, ControladorCurso.crearCurso);
-api.get('/obtenerCursoDisponible/:page?/:itemPerPage?', ControladorCurso.obtenerCursoDisponible);
+//api.get('/obtenerCursoDisponible/:page?/:itemPerPage?', ControladorCurso.obtenerCursoDisponible);
+api.get('/obtenerCursoDisponible', ControladorCurso.obtenerCursoDisponible);
 api.get('/obtenerCurso/:id', ControladorCurso.obtenerCurso);
 api.post('/s/:id', [auth_decode, path_images], ControladorCurso.subirImagen);
 api.put('/actualizarCurso/:id', rol_valido, auth_decode, ControladorCurso.actualizarCurso);
