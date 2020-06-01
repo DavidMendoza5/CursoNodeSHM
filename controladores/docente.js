@@ -103,7 +103,7 @@ function login(req, res) {
                 if (verificado) {
                     docente.password = undefined;
                     var token = servicios.auth(docente);
-                    return res.status(200).send({ docente, token })
+                    return res.status(200).send({ correo: docente.correo, nombre: docente.nombre, id: docente.id, rol: docente.role, token })
                 } else {
                     res.status(404).send({ message: 'Las credenciales no coinciden', status: false });
                 }
