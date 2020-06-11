@@ -29,7 +29,8 @@ function crearEstudiante(req, res) {
                     if (err) res.status(500).send({ message: 'Error al crear estudiante', status: false, err: String(err) })
                         // Actualizar status, agregar registrados
                     console.log(params, String('Agregar registrados'))
-                    await servicios.actualizarRegistros(params.curso, estudianteRegistrado);
+                    console.log(Estudiante);
+                    await servicios.actualizarRegistros(params.curso, Estudiante);
                     res.status(200).send({ Estudiante: estudianteRegistrado, status: true })
                 })
             });
@@ -59,7 +60,7 @@ function loginEs(req, res) {
                     if (verificado) {
                         estudiante.password = undefined;
                         var token = jwt.auth(estudiante);
-                        return res.status(200).send({ estudiante, token })
+                        return res.status(200).send({ nombre: estudiante.nombre,correo: estudiante.correo, id: estudiante.id, token })
                     } else {
                         return res.status(404).send({ message: 'Las credenciales no coinciden', status: false });
                     }
