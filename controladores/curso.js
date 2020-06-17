@@ -20,36 +20,36 @@ function crearCurso(req, res) {
 function obtenerCursoDisponible(req, res) {
 
     ModeloCurso.find({ status: { $ne: 5 } }, (err, cursos) => { // ne Significa que traiga todos los cursos que no sean 5
-        console.log(cursos);
-        if (err) return res.status(500).send({ message: 'Error', status: false });
-        res.status(200).send({
-            cursos
+            console.log(cursos);
+            if (err) return res.status(500).send({ message: 'Error', status: false });
+            res.status(200).send({
+                cursos
+            })
         })
-    })
-    /*
-    var params = req.params;
-    var page = 1;
-    if (params.page) {
-        page = parseInt(params.page);
-    }
+        /*
+        var params = req.params;
+        var page = 1;
+        if (params.page) {
+            page = parseInt(params.page);
+        }
     
-    var itemPerPage = 3;
-    if(params.itemPerPage) {
-        itemPerPage = parseInt(params.itemPerPage);
-    }
+        var itemPerPage = 3;
+        if(params.itemPerPage) {
+            itemPerPage = parseInt(params.itemPerPage);
+        }
 
-    ModeloCurso.find({ status: { $ne: 5 } }).paginate(page, itemPerPage, (err, cursos, total) => { // ne Significa que traiga todos los cursos que no sean 5
-        console.log(cursos);
-        if (err) return res.status(500).send({ message: 'Error', status: false });
-        res.status(200).send({
-            cursos,
-            total,
-            page,
-            itemPerPage,
-            pages: Math.ceil(total / itemPerPage)
+        ModeloCurso.find({ status: { $ne: 5 } }).paginate(page, itemPerPage, (err, cursos, total) => { // ne Significa que traiga todos los cursos que no sean 5
+            console.log(cursos);
+            if (err) return res.status(500).send({ message: 'Error', status: false });
+            res.status(200).send({
+                cursos,
+                total,
+                page,
+                itemPerPage,
+                pages: Math.ceil(total / itemPerPage)
+            })
         })
-    })
-    */
+        */
 }
 
 function obtenerCurso(req, res) {

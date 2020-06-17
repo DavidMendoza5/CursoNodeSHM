@@ -11,13 +11,13 @@ var CursoSchema = new Schema({
         },
         temario_file: String,
         temario: {
-            type: Object,
-            required: true
+            type: Object
+                //required: true
         },
         video_introduccion: String,
         sumary: {
-            type: String,
-            required: true
+            type: String
+                //required: true
         },
         docente: {
             type: Schema.ObjectId,
@@ -48,7 +48,7 @@ var CursoSchema = new Schema({
         imagen: { type: String, default: null },
         registrados: [{ type: Schema.ObjectId, ref: 'estudiantes' }],
         descripcion: { type: String, required: true },
-        requisitos: [{ type: String, default: 'Sin requisitos' }],
+        requisitos: { type: String, default: 'Sin requisitos' },
         ubicacion: String
     })
     /*
