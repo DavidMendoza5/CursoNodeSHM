@@ -1,12 +1,15 @@
 'use strict'
-var express = require('express');
+const express = require('express');
+const app = express();
+
+const path = require('path');
+
 var bodyparse = require('body-parser');
-var app = express(); // Instancia de express
 var cors = require('cors');
 var morgan = require('morgan');
 
-app.use(express.static('public'));
-// app.use(express.static(path.join(__dirname + 'public')));
+//CONNECTION WITH PUBLIC FOLDER
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Section 1: Importación de rutas
 var rutas_docente = require('./rutas/docente');
