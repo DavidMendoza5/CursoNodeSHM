@@ -1,32 +1,28 @@
 'use strict'
+const http = require('http');
+const app = require('./app');
 var mongoose = require('mongoose');
 var configuracion = require('./configuracion/config');
-var app = require('./app');
+
 var socketIO = require('socket.io');
+
+//CHANGE PROPERTIES OF APP TO HTTP
+const server = http.createServer(app);
+//CONNECTION CREATED FOR CHAT
+const io = socketIO.listen(server);
 
 mongoose.Promise = global.Promise; // Se declara como una promesa porque de ese tipo serán los datos devueltos
 
 // Conectarnos a la base de datos
 mongoose.connect(configuracion.connexion, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true })
     .then(() => {
-        console.log('conexión exitosa');
-        const server = app.listen(configuracion.port, () => {
-            console.log('Servidor corriendo')
-        })
-        const io = socketIO.listen(server);
-        //const io = socketIO(server);
-        io.on('connection', (socket) => {
-            console.log('new connection', socket.id)
-                // Reenviar a todos los usuarios
-            socket.on('escuchaMensaje', (data) => {
-                io.sockets.emit('enviaMensaje', data)
-            })
-
-            socket.on('escuchaTyping', (data) => {
-                socket.broadcast.emit('enviaTyping', data)
-            })
-
-            io.sockets.emit('test event', 'here is some data')
-        })
+        console.log('Conexión exitosa de Mongo');
+        //PORT
+        server.listen(configuracion.port, () => {
+            console.log('Servidor corriendo', configuracion.port)
+        });
     })
     .catch(err => { console.log(err) })
+
+//CONNECTION WITH THE FILE SOCKETS.JS
+require('./sockets')(io);
