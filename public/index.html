@@ -20,34 +20,45 @@
         </nav>
 
         <!--LOGIN-->
-        <div class="card col-md-4 mx-auto mt-5" id="nickWrap">
-            <div class="card-header text-center"><h3>Enter your username</h3></div>
-            <p id="nickError"></p>
-            <div class="card-body">
-                <form id="nickForm">
-                    <input type="text" id="nickname" class="form-control" autofocus>
-                    <button type="submit" class="btn btn-primary mt-3">
-                        <i class="fas fa-location-arrow"></i> Send
-                    </button>
-                </form>
+        <div class="container" id="nickWrap">
+            <!--ERROR-->
+            <div class="card mx-auto border border-0" style="width: 20rem" id="userError"></div>
+
+            <div class="card col-md-6 mx-auto mt-5">
+                <div class="card-header text-center"><h3>Enter your username</h3></div>
+                <p id="nickError"></p>
+                <div class="card-body">
+                    <form id="nickForm">
+                        <input type="text" id="nickname" class="form-control rounded-pill border border-dark" autofocus>
+                        <button type="submit" class="btn btn-primary rounded-pill mt-3">
+                            <i class="fas fa-location-arrow"></i> Send
+                        </button>
+                    </form>
+                </div>
             </div>
-        </div>
+        </div>    
         
         <!--CHAT-->
         <div class="container" id="contentWrap">
+            <!--ERROR-->
+            <div class="card mx-auto border border-0" style="width: 20rem" id="msgError"></div>
             <div class="row mt-5">
                 <div class="col-md-9">
-                    <div class="card">
+                    <div class="card" style="height: 40rem;">
                         <!--CARD HEADER-->
                         <div class="card-header text-center"><h3>Chat HuasTechnology</h3></div>
-                        <!--CRAD BODY-->
-                        <div class="card-body" id="chat"></div>
+                        <!--CARD BODY-->
+                        <div class="card-body" id="body">
+                            <div class="scroll">
+                                <ul id="chat" class="listMessage"></ul>
+                            </div>
+                        </div>
                         <!--CARD FOOTER-->
                         <form id="message-form" class="card-footer">
                             <div class="input-group">
-                                <input type="text" id="message" class="form-control mt-1" placeholder="Write here" autofocus>
+                                <input type="text" id="message" class="form-control rounded-pill border border-dark  mt-1" placeholder="Write here" autofocus>
                                 <div class="input-group-append">
-                                    <button type="submit" class="btn btn-primary mx-3">Send</button>
+                                    <button type="submit" class="btn btn-primary rounded-pill mx-3">Send</button>
                                 </div>
                             </div>
                         </form>
