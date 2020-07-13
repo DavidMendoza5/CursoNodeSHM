@@ -7,7 +7,7 @@ var bcrypt = require('bcrypt-nodejs');
 var servicios = require('../servicios/datos');
 var jwt = require('../servicios/jwt');
 
-function crearEstudiante(req, res) {
+/*function crearEstudiante(req, res) {
     var params = req.body;
     var Estudiante = new ModelEstudiante(params);
 
@@ -25,13 +25,16 @@ function crearEstudiante(req, res) {
                     //Estudiante.password = hash;
                 Estudiante.token_calificacion = hash2;
                 Estudiante.status_calificacion = true;
+                console.log(Estudiante);
                 Estudiante.save(async(err, estudianteRegistrado) => {
-                    if (err) res.status(500).send({ message: 'Error al crear estudiante', status: false, err: String(err) })
+                    if (err) res.status(500).send({ message: 'Error al crear estudiante', status: false, err: String(err) });
                         // Actualizar status, agregar registrados
-                    console.log(params, String('Agregar registrados'))
-                    console.log(Estudiante);
-                    await servicios.actualizarRegistros(params.curso, Estudiante);
-                    res.status(200).send({ Estudiante: estudianteRegistrado, status: true })
+                    else {
+                        console.log(params, String('Agregar registrados'))
+                        console.log(Estudiante);
+                        await servicios.actualizarRegistros(params.curso, Estudiante);
+                        res.status(200).send({ Estudiante: estudianteRegistrado, status: true })
+                    }
                 })
             });
             bcrypt.hash(params.password, null, null, (err, hash) => {
@@ -41,6 +44,36 @@ function crearEstudiante(req, res) {
         })
     } catch (err) {
         console.log(err);
+    }
+}*/
+
+function crearEstudiante(req, res) {
+    var params = req.body;
+    var Estudiante = new ModelEstudiante(params);
+    try {
+        ModelEstudiante.find({correo: params.correo}, (err, duplicado) => {
+            if (err) res.status(500).send({ mensaje: err, status: false });
+            if(duplicado && duplicado.length >= 1) {
+                res.status(500).send({ mensaje: 'Estudiante existente', status: false });
+            } else {
+                bcrypt.hash(params.password, null, null, (err, hash) => {
+                    if (err) res.status(500).send({ mensaje: 'Error al encriptar la contraseña', status: false });
+                    Estudiante.password = hash;
+                    console.log(Estudiante);
+                    Estudiante.save((err, estudianteRegistrado) => {
+                        if (err) {
+                            res.status(500).send({ mensaje: 'Error al insertar al estudiante', status: false });
+                            console.error(err);
+                        } else {                        
+                            console.log(estudianteRegistrado);
+                            res.status(200).send({ estudiante: estudianteRegistrado, status: true });
+                        }
+                    });
+                })
+            }
+        })
+    } catch(err) {
+        console.error(err);
     }
 }
 
