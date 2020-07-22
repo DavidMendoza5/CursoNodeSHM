@@ -1,13 +1,14 @@
 'use strict'
-var express = require('express');
-var ControladorDocente = require('../controladores/docente');
-var { auth_decode, rol_valido, rol_ADMIN } = require('../servicios/jwt_decode');
+const express = require('express');
+const ControladorDocente = require('../controladores/docente');
+const { auth_decode, rol_valido, rol_ADMIN } = require('../servicios/jwt_decode');
+const validarDocente = require('../middlewares/validarDuplicados')
 
-var api = express.Router(); // Sirve para no carga uno por uno los endpoints
+const api = express.Router(); // Sirve para no carga uno por uno los endpoints
 
 //api.get('/home', ControladorDocente.home);
 //api.post('/insert', ControladorDocente.insert);
-api.post('/crearDocente', rol_ADMIN, auth_decode, ControladorDocente.crearDocente);
+api.post('/crearDocente', rol_ADMIN, auth_decode,  validarDocente, ControladorDocente.crearDocente);
 api.get('/obtenerDocente/:id', ControladorDocente.obtenerDocente); // Los dos puntos con el id indica que esperamos datos de regreso, si se pone el signo de interrogación quiere decir que no puede no allar el dato
 //api.get('/obtenerDocentes/:page?/:itemPerPage?', ControladorDocente.obtenerDocentes);
 api.get('/obtenerDocentes', ControladorDocente.obtenerDocentes);
