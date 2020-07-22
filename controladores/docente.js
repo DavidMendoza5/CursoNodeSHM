@@ -1,49 +1,31 @@
 'use strict'
-var ModelDocente = require('../modelos/docente');
-var bcrypt = require('bcrypt-nodejs');
-var mongoosePaginate = require('mongoose-pagination');
-var servicios = require('../servicios/jwt');
-var ModelCursos = require('../modelos/curso');
-var ModelEstudiantes = require('../modelos/estudiante');
-var ModelComentarios = require('../modelos/comentario');
+const ModelDocente = require('../modelos/docente');
+const bcrypt = require('bcrypt-nodejs');
+const mongoosePaginate = require('mongoose-pagination');
+const servicios = require('../servicios/jwt');
+const ModelCursos = require('../modelos/curso');
+const ModelEstudiantes = require('../modelos/estudiante');
+const ModelComentarios = require('../modelos/comentario');
+const encriptar = require('../utils/encriptar')
+const crearDocenteEnDB = require('../bd/Docente/crear')
+
 
 // Cuando enviamos por POST es body y cuando es un GET es por params.
 
 function crearDocente(req, res) {
-    var params = req.body;
-    var Docente = new ModelDocente();
-
-    Docente.nombre = params.nombre;
-    Docente.role = params.role;
-    Docente.resumen = params.resumen;
-    Docente.total_estudiantes = 0;
-    Docente.imagen_perfil = params.imagen_perfil;
-    Docente.correo = params.correo;
-    Docente.password = params.password;
-    Docente.redes_sociales.facebook = params.facebook;
-    Docente.redes_sociales.twitter = params.twitter;
-    Docente.redes_sociales.youtube = params.youtube;
-    Docente.redes_sociales.linkedin = params.linkedin;
-
     try {
-        // Validar si el correo del docente ya existe
-        ModelDocente.find({ correo: params.correo }, (err, duplicado) => {
-            if (err) res.status(500).send({ mensaje: err, status: false });
-            if (duplicado && duplicado.length >= 1) {
-                res.status(500).send({ mensaje: 'Docente existente', status: false });
-            } else {
-                bcrypt.hash(params.password, null, null, (err, hash) => {
-                    if (err) res.status(500).send({ mensaje: 'Error al encriptar la contraseña', status: false });
-                    Docente.password = hash;
-                    Docente.save((err, docenteRegistrado) => {
-                        if (err) res.status(500).send({ mensaje: 'Error al insertar docente', status: false });
-                        res.status(200).send({ docente: docenteRegistrado, status: true });
-                    });
-                })
-            }
-        })
-    } catch (err) {
-        console.log(err);
+        const params = req.body
+        let status = 0, message = {}
+        params.password = encriptar(params.password, 10)
+        if(!encriptar.length > 20) throw new Error("Error al encriptar la contraseña")
+        function validarRegistro(err, docenteRegistrado) {
+            status = err ? 500:200
+            message = err ? { message: "Error al registrar al docente" }:{ docente: docenteRegistrado}
+            res.status(status).send(message);
+        }
+        crearDocenteEnDB(params, validarRegistro)
+    } catch(err) {
+        res.status(500).send({ message: error.message });
     }
 }
 
